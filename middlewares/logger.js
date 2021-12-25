@@ -1,12 +1,8 @@
 const { createLogger, format, transports } = require('winston');
 
-const {
-  combine, splat, timestamp, printf,
-} = format;
+const { combine, splat, timestamp, printf } = format;
 
-const myFormat = printf(({
-  level, message, timestamp, ...metadata
-}) => {
+const myFormat = printf(({ level, message, timestamp, ...metadata }) => {
   let msg = `${timestamp} [${level}] : ${message} `;
   if (metadata) {
     msg += JSON.stringify(metadata);
@@ -20,7 +16,7 @@ const logger = createLogger({
   transports: [new transports.Console({ level: 'info' })],
 });
 
-// using the logger and its configured transports, to save the logs created by Morgan
+// using the logger and its configured transports, to save the all logs created by Morgan
 const myStream = {
   write: (text) => {
     logger.info(text);
