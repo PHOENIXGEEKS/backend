@@ -21,7 +21,7 @@ const logger = createLogger({
   transports: [new transports.Console({ level: 'info' })],
 });
 
-// using the logger and its configured transports, to save the all logs created by Morgan
+// using the logger and its configured transports, to save the logs created by Morgan
 const myStream = {
   write: (text) => {
     logger.info(text);
