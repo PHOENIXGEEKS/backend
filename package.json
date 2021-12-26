@@ -7,8 +7,8 @@
     "node": "17.X"
   },
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon app.js",
+    "start": "pm2 start server_start.json --no-daemon",
+    "dev": "cross-env NODE_ENV=development nodemon src/index.js",
     "lint": "eslint . --fix --ext .js",
     "prepare": "husky install"
   },
