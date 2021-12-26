@@ -1,7 +1,7 @@
 {
   "name": "gyandaan",
   "version": "1.0.0",
-  "description": "gyandaan backend",
+  "description": "gyandaan backend node",
   "main": "app.js",
   "engines": {
     "node": "17.X"
