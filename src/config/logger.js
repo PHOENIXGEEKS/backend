@@ -1,32 +1,26 @@
-/* eslint-disable no-shadow */
-const { createLogger, format, transports } = require('winston');
+const winston = require('winston');
+const config = require('./config');
 
-const {
-  combine, splat, timestamp, printf,
-} = format;
-
-const myFormat = printf(({
-  level, message, timestamp, ...metadata
-}) => {
-  let msg = `${timestamp} [${level}] : ${message} `;
-  if (metadata) {
-    msg += JSON.stringify(metadata);
+const enumerateErrorFormat = winston.format((info) => {
+  if (info instanceof Error) {
+    Object.assign(info, { message: info.stack });
   }
-  return msg;
+  return info;
 });
 
-const logger = createLogger({
-  level: 'info',
-  format: combine(format.colorize(), splat(), timestamp(), myFormat),
-  transports: [new transports.Console({ level: 'info' })],
+const logger = winston.createLogger({
+  level: config.env === 'development' ? 'debug' : 'info',
+  format: winston.format.combine(
+    enumerateErrorFormat(),
+    config.env === 'development' ? winston.format.colorize() : winston.format.uncolorize(),
+    winston.format.splat(),
+    winston.format.printf(({ level, message }) => `${level}: ${message}`),
+  ),
+  transports: [
+    new winston.transports.Console({
+      stderrLevels: ['error'],
+    }),
+  ],
 });
 
-// using the logger and its configured transports, to save the logs created by Morgan
-const myStream = {
-  write: (text) => {
-    logger.info(text);
-  },
-};
-
-module.exports.logger = logger;
-module.exports.stream = myStream;
+module.exports = logger;

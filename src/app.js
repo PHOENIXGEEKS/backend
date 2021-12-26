@@ -1,16 +1,20 @@
 const express = require('express');
 const helmet = require('helmet');
 const xss = require('xss-clean');
+const httpStatus = require('http-status');
 const mongoSanitize = require('express-mongo-sanitize');
 const compression = require('compression');
 const cors = require('cors');
-const morgan = require('morgan');
-const { stream } = require('./config/logger');
+const morgan = require('./config/morgan');
+const routes = require('./routes/v1');
+const { errorConverter, errorHandler } = require('./middlewares/error');
+const ApiError = require('./utils/ApiError');
 
 const app = express();
 
 // log http reqs
-app.use(morgan('combined', { stream }));
+app.use(morgan.successHandler);
+app.use(morgan.errorHandler);
 
 // set security HTTP headers
 app.use(helmet());
@@ -31,8 +35,18 @@ app.use(compression());
 // enable cors
 app.use(cors());
 
-app.get('/', (req, res) => {
-  res.send('Hello world');
+// v1 api routes
+app.use('/v1', routes);
+
+// send back a 404 error for any unknown api request
+app.use((req, res, next) => {
+  next(new ApiError(httpStatus.NOT_FOUND, 'Not found'));
 });
+
+// convert error to ApiError, if needed
+app.use(errorConverter);
+
+// handle error
+app.use(errorHandler);
 
 module.exports = app;
