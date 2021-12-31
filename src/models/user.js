@@ -31,7 +31,6 @@ const userSchema = mongoose.Schema(
           throw new Error('Password must contain at least one letter and one number');
         }
       },
-      select: false,
     },
     role: {
       type: String,
@@ -41,6 +40,15 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    emailToken: {
+      type: String,
+      unique: true,
+    },
+    forgotPasswordToken: {
+      type: String,
+      unique: true,
+    },
+    forgotPasswordExpiry: Number,
   },
   {
     timestamps: true,

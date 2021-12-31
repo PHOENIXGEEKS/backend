@@ -1,5 +1,6 @@
 const express = require('express');
 const pingRoute = require('./ping');
+const userRoute = require('./user');
 
 const router = express.Router();
 
@@ -7,6 +8,10 @@ const defaultRoutes = [
   {
     path: '/',
     route: pingRoute,
+  },
+  {
+    path: '/register',
+    route: userRoute,
   },
 ];
 
