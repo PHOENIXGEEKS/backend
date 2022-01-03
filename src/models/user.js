@@ -34,21 +34,16 @@ const userSchema = mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ['mentor', 'mentee'],
-    },
-    isEmailVerified: {
-      type: Boolean,
-      default: false,
-    },
-    emailToken: {
-      type: String,
-      unique: true,
+      enum: ['mentor', 'mentee', 'admin'],
     },
     forgotPasswordToken: {
       type: String,
       unique: true,
     },
-    forgotPasswordExpiry: Number,
+    forgotPasswordExpiry: {
+      type: Number,
+      default: 3,
+    },
   },
   {
     timestamps: true,

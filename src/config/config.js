@@ -9,6 +9,8 @@ const envVarsSchema = Joi.object()
     NODE_ENV: Joi.string().valid('production', 'development').required(),
     PORT: Joi.number().positive().default(3000),
     MONGODB_URL: Joi.string().required().description('Mongo DB url'),
+    JWT_SECRET: Joi.string().required(),
+    JWT_EXPIRY: Joi.number().positive().required(),
   })
   .unknown();
 
@@ -21,6 +23,8 @@ if (error) {
 module.exports = {
   env: envVars.NODE_ENV,
   port: envVars.PORT,
+  JWT_SECRET: envVars.JWT_SECRET,
+  JWT_EXPIRY: envVars.JWT_EXPIRY,
   mongoose: {
     url: envVars.MONGODB_URL,
     options: {
