@@ -4,10 +4,15 @@ const { UserService, AuthService } = require('../services');
 const config = require('../config/config');
 
 const register = catchAsync(async (req, res) => {
-  const user = await UserService.createUser(req.body);
+  await UserService.createUser(req.body);
+  res.status(httpStatus.CREATED).send({ success: true, data: 'User registered successfully.' });
+});
+
+const login = catchAsync(async (req, res) => {
+  const user = await UserService.loginUser(req.body);
   const token = await AuthService.generateToken(user);
   res.cookie('authentication', token.toString('base64'), {
-    maxAge: 24 * 60 * 60 * 1000,
+    maxAge: config.JWT_EXPIRY * 24 * 60 * 60 * 1000,
     // You can't access these tokens in the client's javascript
     httpOnly: true,
     // Forces to use https in production
@@ -16,4 +21,4 @@ const register = catchAsync(async (req, res) => {
   res.status(httpStatus.CREATED).send({ success: true, data: user });
 });
 
-module.exports = register;
+module.exports = { register, login };

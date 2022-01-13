@@ -1,6 +1,7 @@
 const express = require('express');
 const pingRoute = require('./ping');
 const userRoute = require('./user');
+const authRoute = require('./auth');
 
 const router = express.Router();
 
@@ -12,6 +13,10 @@ const defaultRoutes = [
   {
     path: '/register',
     route: userRoute,
+  },
+  {
+    path: '/login',
+    route: authRoute,
   },
 ];
 

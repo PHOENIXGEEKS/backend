@@ -5,6 +5,6 @@ const userValidation = require('../../validations/user');
 
 const router = express.Router();
 
-router.route('/').post(validate(userValidation.register), UserController.register);
+router.route('/').post(validate(userValidation.login), UserController.login);
 
 module.exports = router;
